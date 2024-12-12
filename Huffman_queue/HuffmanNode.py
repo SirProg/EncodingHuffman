@@ -6,4 +6,4 @@ class HuffmanNode:
         self.right = None
     
     def __lt__(self, other):
-        return self.frecuency < other.frequency
+        return self.frecuency < other.frecuency

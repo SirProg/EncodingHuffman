@@ -7,28 +7,63 @@
 
     <main class="flex-grow container mx-auto px-4 py-8">
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-            <input type="file" id="fileInput" accept=".png, .jpg, .mp4, .webq" class="hidden" />
-            <label for="fileInput" class="block w-full cursor-pointer bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
-                Choose a file
-            </label>
-            <div id="preview" class="mt-4 hidden">
-                <h1 class="max-w-full h-auto text-center">Original file</h1>
-                <img id="imagePreview" class="max-w-full h-auto rounded-lg" alt="Image preview" />
-                <video id="videoPreview" class="max-w-full h-auto rounded-lg" controls></video>
-            </div>
-            <div id="compress" class="mt-4 hidden">
-                <h1 class="max-w-full h-auto text-center">Compress file</h1>
-                <img id="imageCompress" class="max-w-full h-auto rounded-lg" alt="Image compress"/>
-                <video id="videoCompress" class="max-w-full h-auto rounded-lg" controls></video>
-            </div>
-            <button id="uploadButton" class="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">
-                Upload File
-            </button>
+            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="inputFile" accept=".png, .jpg, .mp4, .webq, " class="hidden" required/>
+                <label for="fileInput" class="block w-full cursor-pointer bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                    Choose a file
+                </label>
+                <div id="preview" class="mt-4">
+                        <h1 class="max-w-full h-auto text-center">Original file</h1>
+                        <img id="imagePreview" class="max-w-full h-auto rounded-lg hidden" alt="Image preview" />
+                        <video id="videoPreview" class="max-w-full h-auto rounded-lg hidden" controls></video>
+                </div>
+                <div id="compress" class="mt-4">
+                        <h1 class="max-w-full h-auto text-center">Compress file</h1>
+                        {% if compress_image_url %}
+                        <img src="{{ compress_image_url }}" id="imageCompress" class="max-w-full h-auto rounded-lg" alt="Compress image"/>
+                        {% endif %}
+                        <video id="videoCompress" class="max-w-full h-auto rounded-lg" controls></video>
+                </div>
+                <div class="mt-4">
+                    <p>Original size: {{ original_size }} bytes</p>
+                    <p>Compressed size: {{ compress_size }} bytes</p>
+                    <p>Compression ratio: {{ compress_ratio }}%</p>
+                    </div>
+                <button id="uploadButton" type="submit" class="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">
+                    Compress File
+                </button>
+            </form>
+        </div>
+        <div >
+
         </div>
     </main>
 
     <footer class="bg-gray-800 text-white p-4">
-        <p class="text-center">&copy; 2024 Image and Video compress and descompress</p>
+        <p class="text-center">&copy; 2024 Compress and descompress video and image</p>
     </footer>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const videoPreview = document.getElementById('videoPreview');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileType = file.type.split('/')[0];
+                
+                if (fileType === 'image') {
+                    imagePreview.src = URL.createObjectURL(file);
+                    imagePreview.classList.remove('hidden');
+                    videoPreview.classList.add('hidden');
+                } else if (fileType === 'video') {
+                    videoPreview.src = URL.createObjectURL(file);
+                    videoPreview.classList.remove('hidden');
+                    imagePreview.classList.add('hidden');
+                }
+            }
+        });
+    </script>
     
 {% endblock %}

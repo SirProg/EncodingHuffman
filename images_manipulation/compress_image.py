@@ -1,18 +1,18 @@
 from collections import defaultdict
 from PIL import Image
 from bitarray import bitarray
-from ..queue.HuffmanTree import *
+from Huffman_queue import HuffmanTree
 
-def compress_image(image: Image):
+def compress_image_func(image: Image):
     width, height = image.size
     pixels = list(image.getdata())
     freq_dict = defaultdict(int)
 
     for pixel in pixels:
-        freq_dict[pixels] += 1
+        freq_dict[pixel] += 1
     
-    root = create_huffman_tree(freq_dict)
-    huffman_codes = create_huffman_code(root)
+    root = HuffmanTree.create_huffman_tree(freq_dict)
+    huffman_codes = HuffmanTree.create_huffman_code(root)
 
     encode_data = bitarray()
     for pixel in pixels:

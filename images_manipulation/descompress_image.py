@@ -1,9 +1,7 @@
 from collections import defaultdict
-from PIL import Image
-from bitarray import bitarray
-from ..queue.HuffmanTree import *
+from PIL import Image 
 
-def descompress_image(compress_data: dict):
+def descompress_image_func(compress_data: dict):
     width = compress_data['width']
     height = compress_data['height']
     huffman_codes = compress_data['huffman_codes']
