@@ -8,7 +8,7 @@
     <main class="flex-grow container mx-auto px-4 py-8">
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
             <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
-                <input type="file" id="fileInput" name="inputFile" accept=".png, .jpg, .mp4, .webq, " class="hidden" required/>
+                <input type="file" id="fileInput" name="inputFile" accept=".png, .jpg, .webq, " class="hidden" required/>
                 <label for="fileInput" class="block w-full cursor-pointer bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
                     Choose a file
                 </label>
@@ -22,7 +22,6 @@
                         {% if compress_image_url %}
                         <img src="{{ compress_image_url }}" id="imageCompress" class="max-w-full h-auto rounded-lg" alt="Compress image"/>
                         {% endif %}
-                        <video id="videoCompress" class="max-w-full h-auto rounded-lg" controls></video>
                 </div>
                 <div class="mt-4">
                     <p>Original size: {{ original_size }} bytes</p>
