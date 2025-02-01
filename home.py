@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, send_from_directory
 from collections import Counter
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -20,6 +20,16 @@ ensure_dic(app.config['UPLOAD_FOLDER'])
 ensure_dic(app.config['COMPRESSED_FOLDER'])
 ensure_dic(app.config['DESCOMPRESSED_FOLDER'])
 
+# Ruta para servir imágenes desde el directorio de upload
+@app.route('/upload/<filename>')
+def serve_uploaded_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# Ruta para servir imágenes desde el directorio de descomprimidas
+@app.route('/descompress/<filename>')
+def serve_descompressed_image(filename):
+    return send_from_directory(app.config['DESCOMPRESSED_FOLDER'], filename)
+
 #Inicio de la página
 @app.route("/")
 def home():
@@ -39,6 +49,7 @@ def upload():
     file_type = file.content_type.split("/")[0]
     #Verifica que es un archivo de tipo imagen
     if file and file_type == "image":
+        original_filename = secure_filename(file.filename)
         original_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(original_path)
         file_data = file.filename.split('.')
@@ -53,6 +64,7 @@ def upload():
             compress_data['encode_data'].tofile(f)
 
         # Se descomprime usando los datos de la imagen comprimida y este se guarda como una imagen.
+        descompress_filename = f"descompress_{original_filename}"
         descompress_img = descompress_image.descompress_image_func(compress_data)
         descompress_path = os.path.join(app.config['DESCOMPRESSED_FOLDER'], f"descompress_{file.filename}")
         descompress_img.save(descompress_path)
@@ -67,7 +79,8 @@ def upload():
                 original_size = original_size,
                 compress_size = compress_size,
                 compress_ratio = f"{compress_ratio:.2f}",
-                compress_image_url = descompress_path)
+                original_image_url=url_for('serve_uploaded_image', filename=original_filename),
+                descompressed_image_url=url_for('serve_descompressed_image', filename=descompress_filename))
 
     return render_template('index.html')
 

@@ -1,46 +1,45 @@
 {% extends 'head.html' %}
 
 {% block content %}
-    <header class="bg-blue-600 text-white p-4">
-        <h1 class="text-2xl font-bold text-center">Project Huffman Coding</h1>
-    </header>
-
-    <main class="flex-grow container mx-auto px-4 py-8">
-        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
-                <input type="file" id="fileInput" name="inputFile" accept=".png, .jpg, .webq, " class="hidden" required/>
-                <label for="fileInput" class="block w-full cursor-pointer bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
-                    Choose a file
-                </label>
-                <div id="preview" class="mt-4">
+    <div class="relative min-h-[100vh]">
+        <header class="bg-blue-600 text-white p-4">
+            <h1 class="text-2xl font-bold text-center">Project Huffman Coding</h1>
+        </header>
+    
+        <main class="flex-grow gap-4 container mx-auto px-4 py-8">
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+                <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+                    <input type="file" id="fileInput" name="inputFile" accept=".png, .jpg " class="hidden" required/>
+                    <label for="fileInput" class="block w-full cursor-pointer bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                        Choose a file
+                    </label>
+                    <div id="preview" class="mt-4">
                         <h1 class="max-w-full h-auto text-center">Original file</h1>
-                        <img id="imagePreview" class="max-w-full h-auto rounded-lg hidden" alt="Image preview" />
-                        <video id="videoPreview" class="max-w-full h-auto rounded-lg hidden" controls></video>
-                </div>
-                <div id="compress" class="mt-4">
-                        <h1 class="max-w-full h-auto text-center">Compress file</h1>
-                        {% if compress_image_url %}
-                        <img src="{{ compress_image_url }}" id="imageCompress" class="max-w-full h-auto rounded-lg" alt="Compress image"/>
-                        {% endif %}
-                </div>
-                <div class="mt-4">
-                    <p>Original size: {{ original_size }} bytes</p>
-                    <p>Compressed size: {{ compress_size }} bytes</p>
-                    <p>Compression ratio: {{ compress_ratio }}%</p>
+                        <img id="imagePreview" src="{{ original_image_url }}" class="max-w-full h-auto rounded-lg hidden" alt="Image preview" />
                     </div>
-                <button id="uploadButton" type="submit" class="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">
-                    Compress File
-                </button>
-            </form>
-        </div>
-        <div >
-
-        </div>
-    </main>
-
-    <footer class="bg-gray-800 text-white p-4">
-        <p class="text-center">&copy; 2024 Compress and descompress video and image</p>
-    </footer>
+                    {% if descompressed_image_url %}
+                    <div id="compress" class="mt-4">
+                        <h1 class="max-w-full h-auto text-center">Compress File</h1>
+                        <img src="{{ descompressed_image_url }}" alt="imagen compress">
+                    </div>
+                    {% endif %}
+                    <div class="mt-4 grid grid-row-3 gap-4 p-2 rounded-md bg-gray-200">
+                        <p class=""><b>Original size:</b> {{ original_size }} bytes</p>
+                        <p class=""><b>Compressed size:</b> {{ compress_size }} bytes</p>
+                        <p class=""><b>Compression ratio:</b> {{ compress_ratio }}%</p>
+                    </div>
+                    <button id="uploadButton" type="submit" class="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">
+                        Compress File
+                    </button>
+                </form>
+            </div>
+        </main>
+    
+        <footer class="bg-gray-800 text-white p-4 absolute bottom-0 w-full h-[3.5rem] text-center">
+            <p class="text-center">&copy; 2024 Compress and descompress video and image</p>
+        </footer>
+    </div>
+    
 
     <script>
         const fileInput = document.getElementById('fileInput');
